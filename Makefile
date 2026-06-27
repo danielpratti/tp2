@@ -1,0 +1,29 @@
+# Makefile - Campeonato Computacional de Futebol (Parte II)
+
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11 -Iinclude -g
+SRC_DIR = src
+OBJ_DIR = obj
+BIN = campeonato
+
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+
+.PHONY: all clean run
+
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+run: all
+	./$(BIN)
+
+clean:
+	rm -rf $(OBJ_DIR) $(BIN)
